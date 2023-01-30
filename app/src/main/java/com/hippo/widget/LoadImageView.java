@@ -63,6 +63,7 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
     private int mClipWidth = Integer.MIN_VALUE;
     private int mClipHeight = Integer.MIN_VALUE;
     private int mRetryType;
+    private boolean mStarted;
     private boolean mFailed;
     private boolean mLoadFromDrawable = false;
 
@@ -108,7 +109,7 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
         if (!mLoadFromDrawable) {
             if (mFailed) {
                 onFailure();
-            } else if (mConaco.isLoading(this)) {
+            } else if (!mStarted && !mConaco.isLoading(this)) {
                 load(mKey, mUrl, mContainer, mUseNetwork);
             }
         }
@@ -221,6 +222,7 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
             return;
         }
 
+        mStarted = true;
         mFailed = false;
         clearRetry();
 
@@ -313,6 +315,7 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
 
     @Override
     public void onFailure() {
+        mStarted = false;
         mFailed = true;
         clearDrawable();
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.image_failed);
@@ -332,6 +335,7 @@ public class LoadImageView extends FixedAspectImageView implements Unikery<Image
 
     @Override
     public void onCancel() {
+        mStarted = false;
         mFailed = false;
     }
 

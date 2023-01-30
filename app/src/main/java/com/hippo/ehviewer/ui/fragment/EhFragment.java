@@ -55,7 +55,9 @@ public class EhFragment extends BasePreferenceFragment {
         blackDarkTheme.setOnPreferenceChangeListener(this);
 
         if (!EhTagDatabase.isPossible(requireActivity())) {
-            getPreferenceScreen().removePreference(showTagTranslations);
+            if (!Settings.getShowTagTranslations()) {
+                getPreferenceScreen().removePreference(showTagTranslations);
+            }
             getPreferenceScreen().removePreference(tagTranslationsSource);
         }
     }

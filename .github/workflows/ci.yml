@@ -3,9 +3,9 @@ name: CI
 on:
   push:
     branches:
-      - eh-1.7.27.x
+      - '*'
     tags-ignore:
-      - "*"
+      - '*'
 
 jobs:
   linux:
@@ -56,3 +56,16 @@ jobs:
         with:
           name: x86-${{ github.sha }}
           path: app/build/outputs/apk/release/app-x86-release.apk
+
+      - name: Upload universal
+        uses: actions/upload-artifact@v3
+        with:
+          name: universal-${{ github.sha }}
+          path: app/build/outputs/apk/release/app-universal-release.apk
+
+      - name: Upload mapping
+        uses: actions/upload-artifact@v3
+        with:
+          name: mapping-${{ github.sha }}
+          path: app/build/outputs/mapping/release/mapping.txt
+          retention-days: 5
